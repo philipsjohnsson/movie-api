@@ -11,6 +11,9 @@ import { AuthService } from '../services/AuthService.js'
 // import { HomeController } from '../controllers/HomeController.js'
 import { AuthController } from '../controllers/AuthController.js'
 import { AuthRepository } from '../repositories/AuthRepository.js'
+import { MovieController } from '../controllers/MovieController.js'
+import { MovieService } from '../services/MovieService.js'
+import { MovieRepository } from '../repositories/MovieRepository.js'
 // import { UserController } from '../controllers/UserController.js'
 
 const iocContainer = new IoCContainer()
@@ -37,9 +40,24 @@ iocContainer.register('AuthRepository', AuthRepository, {
   singleton: true
 }) */
 
+iocContainer.register('MovieRepository', MovieRepository, {
+  singleton: true
+})
+
+iocContainer.register('MovieService', MovieService, {
+  singleton: true
+})
+
 iocContainer.register('AuthController', AuthController, {
   dependencies: [
     'AuthService'
+  ],
+  singleton: true
+})
+
+iocContainer.register('MovieController', MovieController, {
+  dependencies: [
+    'MovieService'
   ],
   singleton: true
 })

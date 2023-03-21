@@ -11,5 +11,15 @@ import { router as moviesRouter } from './moviesRouter.js'
 
 export const router = express.Router()
 
+router.get('/', (req, res) => res.json({
+  message: 'Welcome to this Movie Api!',
+  links: [
+    {
+      rel: 'self',
+      href: `${req.protocol}://${req.get('host')}/api/v1`
+    }
+
+  ]
+}))
 router.use('/user', accountRouter)
-router.use('/movies', moviesRouter)
+router.use('/movie', moviesRouter)

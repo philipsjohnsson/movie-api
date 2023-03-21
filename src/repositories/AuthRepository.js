@@ -21,17 +21,14 @@ export class AuthRepository {
       console.log(req.body)
       const user = new User({
         username: req.body.username,
-        password: req.body.password,
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        email: req.body.email
+        password: req.body.password
       })
       console.log(user)
       await user.save()
 
       res
         .status(201)
-        .json({ id: user.id })
+        .json({ id: user.id, login: 'localhost:8080/api/v1/user/login' })
     } catch (err) {
       console.log(err)
       let error = err
@@ -60,9 +57,6 @@ export class AuthRepository {
       console.log(user)
       const payload = {
         username: user.username,
-        first_name: user.firstName,
-        last_name: user.lastName,
-        email: user.email,
         id: user._id
       }
 
@@ -71,7 +65,7 @@ export class AuthRepository {
         expiresIn: process.env.ACCESS_TOKEN_LIFE
       })
 
-      res
+      res // Make repository responsible for this instead.
         .status(201)
         .json({
           access_token: accessToken

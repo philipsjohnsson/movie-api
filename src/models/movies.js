@@ -14,6 +14,14 @@ const movieSchema = new mongoose.Schema({
     type: String,
     required: [true, 'A movie title is required.'],
     unique: true
+  },
+  category: {
+    type: String,
+    required: [true, 'A movie needs a category']
+  },
+  releaseYear: {
+    type: Number,
+    required: [true, 'A release year is needed fo the movie']
   }
 }, {
   timestamps: true,
@@ -36,10 +44,6 @@ movieSchema.virtual('id').get(function () {
   return this._id.toHexString()
 })
 
-movieSchema.pre('save', async function () {
-  this.password = await bcrypt.hash(this.password, 10)
-})
-
 /**
  * Checks if the password matches and if the user exists.
  *
@@ -58,4 +62,4 @@ movieSchema.statics.authenticate = async function (username, password) {
   return user
 }
 
-export const User = mongoose.model('Movie', movieSchema)
+export const Movie = mongoose.model('Movie', movieSchema)

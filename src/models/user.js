@@ -7,9 +7,6 @@
 
 import mongoose from 'mongoose'
 import bcrypt from 'bcrypt'
-import validator from 'validator'
-
-const { isEmail } = validator
 
 const userSchema = new mongoose.Schema({
   username: {
@@ -23,23 +20,6 @@ const userSchema = new mongoose.Schema({
     required: [true, 'Password is required.'],
     minlength: [10, 'The password must be of minimum length 10 characters.'],
     maxlength: [200, 'The password must be shorter than 200.']
-  },
-  firstName: {
-    type: String,
-    required: [true, 'First name is required.'],
-    trim: true
-  },
-  lastName: {
-    type: String,
-    required: [true, 'Last name is required.']
-  },
-  email: {
-    type: String,
-    required: [true, 'Email address is required.'],
-    unique: true,
-    lowercase: true,
-    trim: true,
-    validate: [isEmail, 'Please provide a valid email address.']
   }
 }, {
   timestamps: true,

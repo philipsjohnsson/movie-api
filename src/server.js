@@ -28,6 +28,8 @@ try {
   // Parse requests of the content type application/json.
   app.use(express.json())
 
+  // app.enable('trust proxy')
+
   // Register routes.
   app.use('/', router)
 
