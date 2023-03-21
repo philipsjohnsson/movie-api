@@ -5,6 +5,7 @@
  * @version 1.0.0
  */
 
+import { container } from './config/bootstrap.js'
 import express from 'express'
 import helmet from 'helmet'
 import logger from 'morgan'
@@ -15,6 +16,8 @@ try {
   await connectDB()
 
   const app = express()
+
+  app.set('container', container) // gör att vi kommer åt containern i router. we store container in container.
 
   // Set various HTTP headers to make the application little more secure (https://www.npmjs.com/package/helmet).
   app.use(helmet())

@@ -7,27 +7,35 @@
 
 import { IoCContainer } from '../util/IoCContainer.js'
 import { AuthService } from '../services/AuthService.js'
-import { UserService } from '../services/UserService.js'
-import { HomeController } from '../controllers/HomeController.js'
+// import { UserService } from '../services/UserService.js'
+// import { HomeController } from '../controllers/HomeController.js'
 import { AuthController } from '../controllers/AuthController.js'
-import { UserController } from '../controllers/UserController.js'
+import { AuthRepository } from '../repositories/AuthRepository.js'
+// import { UserController } from '../controllers/UserController.js'
 
 const iocContainer = new IoCContainer()
 
-iocContainer.register('UserService', UserService, {
+/* iocContainer.register('UserService', UserService, {
   singleton: true
-})
+}) */
 
 iocContainer.register('AuthService', AuthService, {
+  dependencies: [
+    'AuthRepository'
+  ],
   singleton: true
 })
 
-iocContainer.register('UserController', UserController, {
+iocContainer.register('AuthRepository', AuthRepository, {
+  singleton: true
+})
+
+/* iocContainer.register('UserController', UserController, {
   dependencies: [
     'UserService'
   ],
   singleton: true
-})
+}) */
 
 iocContainer.register('AuthController', AuthController, {
   dependencies: [
@@ -36,8 +44,8 @@ iocContainer.register('AuthController', AuthController, {
   singleton: true
 })
 
-iocContainer.register('HomeController', HomeController, {
+/* iocContainer.register('HomeController', HomeController, {
   singleton: true
-})
+}) */
 
 export const container = Object.freeze(iocContainer)
