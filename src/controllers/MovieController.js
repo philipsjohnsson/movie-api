@@ -16,4 +16,8 @@ export class MovieController {
     console.log('we are inside of create movie')
     this.#service.createMovie(req, res, next)
   }
+
+  createReview(req, res, next) {
+    this.#service.createReview(req, res, next)
+  }
 }

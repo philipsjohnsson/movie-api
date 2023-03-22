@@ -21,7 +21,11 @@ const movieSchema = new mongoose.Schema({
   },
   releaseYear: {
     type: Number,
-    required: [true, 'A release year is needed fo the movie']
+    required: [true, 'A release year is needed for the movie']
+  },
+  createdByUserId: {
+    type: String,
+    required: [true, 'A createdByUserId is required for the movie']
   }
 }, {
   timestamps: true,
