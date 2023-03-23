@@ -41,4 +41,12 @@ export class MovieService {
     console.log(review)
     this.#service.createReview(req, res, next, review)
   }
+
+  async updateSomePartInMovie(req, res, next) {
+    return await this.#service.updateSomePartInMovie(req, res, next)
+  }
+
+  async deleteSpecificMovie(req, res, next) {
+    return await this.#service.deleteSpecificMovie(req, res, next)
+  }
 }

@@ -49,6 +49,9 @@ try {
           status_code: 401,
           message: 'Credentials invalid or not provided.'
         })
+    } else if (err.status === 403) {
+      return res
+        .sendStatus(403)
     } else if (err.status === 409) {
       return res
         .sendStatus(409)

@@ -1,4 +1,5 @@
 import { Movie } from '../models/movies.js'
+import createError from 'http-errors'
 
 export class MovieRepository {
   #model
@@ -46,6 +47,34 @@ export class MovieRepository {
       console.log(err)
       console.log('_________________')
       console.log(err.code)
+    }
+  }
+
+  async updateSomePartInMovie(req, res, next) {
+    const movie = await Movie.findOne({ id: req.params.id })
+
+    if (movie.createdByUserId !== req.user.id) {
+      const test = await Movie.findByIdAndUpdate(req.params.id, req.body)// validator might be added here.
+      console.log(':::::::::::::')
+      console.log(test)
+      return test
+    } else {
+      throw createError(403)
+    }
+  }
+
+  async deleteSpecificMovie(req, res, next) {
+    console.log('delete specific movie')
+    console.log(req.params.id)
+    const movie = await Movie.findOne({ id: req.params.id })
+    console.log('---_---_---_---_---')
+    console.log(movie.createdByUserId)
+    console.log(req.user.id)
+
+    if (movie.createdByUserId !== req.user.id) {
+      return await Movie.findByIdAndDelete(req.params.id)
+    } else {
+      throw createError(403)
     }
   }
 }

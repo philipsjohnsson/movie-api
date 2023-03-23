@@ -20,14 +20,14 @@ const resolveMovieController = (req) => req.app.get('container').resolve('MovieC
 
 // router.use('/', () => console.log('TEST TEST'))
 
-
 router.post('/test', (req, res, next) => resolveMovieController(req).testFunction(req, res, next))
 router.post('/create', authenticateJWT, (req, res, next) => resolveMovieController(req).createMovie(req, res, next))
-router.delete('/delete/:id', authenticateJWT, (req, res, next) => resolveMovieController(req).deleteSpecificMovie(req, res, next))
 // router.post('/review/create', (req, res, next) => resolveMovieController(req).createReview(req, res, next))
 // router.post('/review/create', (req, res, next) => resolveMovieController(req).createReview(req, res, next))
 router.get('/', (req, res, next) => resolveMovieController(req).getAllMovies(req, res, next))
 router.post('/review/create', authenticateJWT, (req, res, next) => resolveMovieController(req).createReview(req, res, next))
+router.delete('/:id', authenticateJWT, (req, res, next) => resolveMovieController(req).deleteSpecificMovie(req, res, next))
+router.patch('/:id', authenticateJWT, (req, res, next) => resolveMovieController(req).updateSomePartInMovie(req, res, next))
 // router.post('/review/create', authenticateJWT, resolveMovieController.createReview)
 // router.post('/review/create', resolveMovieController.testFunction, resolveMovieController.createReview)
 

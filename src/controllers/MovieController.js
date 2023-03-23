@@ -3,15 +3,15 @@ import { Movie } from '../models/movies.js'
 import { createLink } from "../util/LinkHandler.js"
 
 export class MovieController {
-  #service
+  #movieService
 
   constructor(service = new MovieService()) {
-    this.#service = service
+    this.#movieService = service
   }
   
   testFunction() {
     console.log('TEST we are inside of MovieController')
-    this.#service.testFunction()
+    this.#movieService.testFunction()
   }
 
   async createMovie(req, res, next) {
@@ -23,7 +23,7 @@ export class MovieController {
         releaseYear: req.body.releaseYear,
         createdByUserId: req.user.id
       }) */
-      const movie = await this.#service.createMovie(new Movie({
+      const movie = await this.#movieService.createMovie(new Movie({
         title: req.body.title,
         category: req.body.category,
         releaseYear: req.body.releaseYear,
@@ -53,8 +53,6 @@ export class MovieController {
         }]
       }
 
-      // this.#service.createMovie(movie)
-
       console.log('*********')
 
       res
@@ -66,13 +64,24 @@ export class MovieController {
     }
   }
 
-  deleteSpecificMovie(req, res, next) {
-    console.log()
+  async deleteSpecificMovie(req, res, next) {
+    try {
+      const deletedMovie = await this.#movieService.deleteSpecificMovie(req, res, next)
+      console.log('deletedMovie')
+      console.log(deletedMovie)
+
+      res
+        .status(204)
+        .json(deletedMovie)
+    } catch (err) {
+      console.log('do we get inside of here? catch delete')
+      res.status(err)
+    }
   }
 
   async getAllMovies(req, res, next) {
     console.log('get all movies')
-    const movies = await this.#service.getAllMovies(req, res, next)
+    const movies = await this.#movieService.getAllMovies(req, res, next)
     console.log(movies)
     console.log(req.user)
     const moviesArray = []
@@ -95,7 +104,21 @@ export class MovieController {
       .json(movies)
   }
 
+  async updateSomePartInMovie(req, res, next) {
+    try {
+      console.log('update some parts in the movie')
+      const movieUpdated = await this.#movieService.updateSomePartInMovie(req, res, next)
+      console.log(movieUpdated)
+      res
+        .status(204)
+        .json(movieUpdated)
+    } catch (err) {
+      console.log('WE ARE INSIDE OF THIS CATCH ERROR')
+      next(err)
+    }
+  }
+
   createReview(req, res, next) {
-    this.#service.createReview(req, res, next)
+    this.#movieService.createReview(req, res, next)
   }
 }
