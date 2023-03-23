@@ -14,14 +14,20 @@ export class MovieService {
     this.#service.testFunction()
   }
 
-  createMovie(req, res, next) {
-    const movie = new Movie({
+  createMovie(movie) {
+    /* const movie = new Movie({
       title: req.body.title,
       category: req.body.category,
       releaseYear: req.body.releaseYear,
       createdByUserId: req.user.id
-    })
-    this.#service.createMovie(req, res, next, movie)
+    }) */
+
+    return this.#service.createMovie(movie)
+  }
+
+  getAllMovies(req, res, next, movies) {
+    console.log('MOVIES')
+    return this.#service.getAllMovies(req, res, next)
   }
 
   createReview(req, res, next) {

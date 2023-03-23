@@ -25,7 +25,8 @@ const movieSchema = new mongoose.Schema({
   },
   createdByUserId: {
     type: String,
-    required: [true, 'A createdByUserId is required for the movie']
+    required: [true, 'A createdByUserId is required for the movie'],
+    immutable: true // makes it not changeable.
   }
 }, {
   timestamps: true,
@@ -65,5 +66,23 @@ movieSchema.statics.authenticate = async function (username, password) {
   // User found and password correct, return the user.
   return user
 }
+
+const convertOptions = {
+  virtuals: true,
+  versionKey: false,
+  /**
+   * Performs a transformation of the resulting object to remove sensitive information.
+   *
+   * @param {object} doc - The mongoose document which is being converted.
+   * @param {object} ret - The plain object representation which has been converted.
+   */
+  transform: (doc, ret) => {
+    delete ret._id
+  }
+}
+
+movieSchema.set('timestamps', true)
+movieSchema.set('toObject', convertOptions)
+movieSchema.set('toJSON', convertOptions)
 
 export const Movie = mongoose.model('Movie', movieSchema)
