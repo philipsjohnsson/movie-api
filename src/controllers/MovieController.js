@@ -1,6 +1,6 @@
-import { MovieService } from "../services/MovieService.js"
+import { MovieService } from '../services/MovieService.js'
 import { Movie } from '../models/movies.js'
-import { createLink } from "../util/LinkHandler.js"
+import { createLink, getLinks, baseLinks } from '../util/LinkHandler.js'
 
 export class MovieController {
   #movieService
@@ -12,6 +12,10 @@ export class MovieController {
   testFunction() {
     console.log('TEST we are inside of MovieController')
     this.#movieService.testFunction()
+  }
+
+  getSpecificMovie(req, res, next) {
+    console.log('GET SPECIFIC MOVIE')
   }
 
   async createMovie(req, res, next) {
@@ -35,6 +39,10 @@ export class MovieController {
         releaseYear: req.body.releaseYear,
         createdByUserId: req.user.id
       }) */
+
+      console.log('---ÅÅÅÅÅÅÅÅ---')
+      console.log(req.originalUrl)
+      console.log(req.user)
 
       const movieObj = {
         title: movie.title,
@@ -81,9 +89,12 @@ export class MovieController {
 
   async getAllMovies(req, res, next) {
     console.log('get all movies')
+    console.log(req.user)
     const movies = await this.#movieService.getAllMovies(req, res, next)
     console.log(movies)
     console.log(req.user)
+    console.log(':::::::::::::::')
+    console.log(req.originalUrl)
     const moviesArray = []
 
     movies.forEach((movie) => {
@@ -91,17 +102,25 @@ export class MovieController {
         title: movie.title,
         category: movie.category,
         releaseYear: movie.releaseYear,
+        createdByUserId: movie.createdByUserId,
         createdAt: movie.createdAt,
         updatedAt: movie.updatedAt,
-        id: movie.id
+        id: movie.id,
+        links: getLinks(req, movie)
       }
       moviesArray.push(movieObj)
     })
+
+    const response = {
+      movies: moviesArray,
+      links: baseLinks(req)
+    }
+
     console.log('---------')
     console.log(moviesArray)
     res
       .status(200)
-      .json(movies)
+      .json(response)
   }
 
   async updateSomePartInMovie(req, res, next) {

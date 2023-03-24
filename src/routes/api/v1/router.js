@@ -8,18 +8,13 @@
 import express from 'express'
 import { router as accountRouter } from './account-router.js'
 import { router as moviesRouter } from './moviesRouter.js'
+import { baseLinks } from '../../../util/LinkHandler.js'
 
 export const router = express.Router()
 
 router.get('/', (req, res) => res.json({
   message: 'Welcome to this Movie Api!',
-  links: [
-    {
-      rel: 'self',
-      href: `${req.protocol}://${req.get('host')}/api/v1`
-    }
-
-  ]
+  links: baseLinks(req)
 }))
 router.use('/user', accountRouter)
 router.use('/movie', moviesRouter)
