@@ -46,6 +46,10 @@ export class MovieService {
     return await this.#service.updateSomePartInMovie(req, res, next)
   }
 
+  async updateAllInMovie(req, res, next) {
+    return await this.#service.updateAllInMovie(req, res, next)
+  }
+
   async deleteSpecificMovie(req, res, next) {
     return await this.#service.deleteSpecificMovie(req, res, next)
   }

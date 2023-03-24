@@ -114,6 +114,16 @@ export class MovieController {
         .json(movieUpdated)
     } catch (err) {
       console.log('WE ARE INSIDE OF THIS CATCH ERROR')
+      console.log(err)
+      console.log(err.status)
+      next(err)
+    }
+  }
+
+  async updateAllInMovie(req, res, next) {
+    try {
+      this.#movieService.updateAllInMovie(req, res, next)
+    } catch (err) {
       next(err)
     }
   }

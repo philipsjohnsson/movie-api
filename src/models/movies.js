@@ -12,8 +12,7 @@ const movieSchema = new mongoose.Schema({
 
   title: {
     type: String,
-    required: [true, 'A movie title is required.'],
-    unique: true
+    required: [true, 'A movie title is required.']
   },
   category: {
     type: String,

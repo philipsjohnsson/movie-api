@@ -1,5 +1,6 @@
 import { Movie } from '../models/movies.js'
 import createError from 'http-errors'
+import mongoose from 'mongoose'
 
 export class MovieRepository {
   #model
@@ -50,26 +51,47 @@ export class MovieRepository {
     }
   }
 
-  async updateSomePartInMovie(req, res, next) {
-    const movie = await Movie.findOne({ id: req.params.id })
+  async updateSomePartInMovie(req, res, next) { // PATCH, UPPDATERA DELAR
+    console.log('we are inside of updatesomepartinmovie')
+    const movie = await Movie.findById(req.params.id) // findById
+    console.log('we are förbi findById')
 
-    if (movie.createdByUserId !== req.user.id) {
-      const test = await Movie.findByIdAndUpdate(req.params.id, req.body)// validator might be added here.
-      console.log(':::::::::::::')
-      console.log(test)
-      return test
+    // findByIdAndUpdate
+
+    console.log(movie)
+
+    if (movie.createdByUserId === req.user.id) {
+      return await Movie.findByIdAndUpdate(req.params.id, req.body)// validator might be added here.
+    } else {
+      throw createError(403)
+    }
+  }
+
+  async updateAllInMovie(req, res, next) { // PUT, UPPDATERA ALLT
+    console.log('inside of update all in movie')
+    console.log('_________________ÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖ')
+    console.log(req.body)
+    const movie = await Movie.findById(req.params.id)
+    console.log(movie)
+    const obj = {
+      title: req.body.title,
+      category: req.body.category,
+      releaseYear: req.body.releaseYear,
+      createdByUserId: movie.createdByUserId
+    }
+
+    if (movie.createdByUserId === req.user.id) {
+      // return await Movie.findByIdAndUpdate(req.params.id, req.body)// validator might be added here.
+
+      return await Movie.findOneAndReplace({ _id: req.params.id }, obj, { runValidators: true })// validator might be added here.
+      // findOneAndReplace
     } else {
       throw createError(403)
     }
   }
 
   async deleteSpecificMovie(req, res, next) {
-    console.log('delete specific movie')
-    console.log(req.params.id)
-    const movie = await Movie.findOne({ id: req.params.id })
-    console.log('---_---_---_---_---')
-    console.log(movie.createdByUserId)
-    console.log(req.user.id)
+    const movie = await Movie.findById({ id: req.params.id })
 
     if (movie.createdByUserId !== req.user.id) {
       return await Movie.findByIdAndDelete(req.params.id)
