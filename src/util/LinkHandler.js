@@ -3,7 +3,6 @@ export const createLink = (req, path) => {
 }
 
 export const getLinks = (req, movie) => {
-  console.log(req.user)
   // if (req.user.id === createdByUserId) {
   return [
     // { rel: 'self', method: req.method, href: `${req.protocol}://${req.get('host')}${req.originalUrl}` },
@@ -13,17 +12,30 @@ export const getLinks = (req, movie) => {
 }
 
 export const loggedInUserGetLinks = (req, movie) => {
-  return [
-    { rel: 'create', method: 'POST', href: `${req.protocol}://${req.get('host')}${req.originalUrl}/${movie.id}` },
-    { rel: 'update', method: 'PATCH', href: `${req.protocol}://${req.get('host')}${req.originalUrl}/${movie.id}`, description: 'Partially update this movie' },
-    { rel: 'update', method: 'PUT', href: `${req.protocol}://${req.get('host')}${req.originalUrl}/${movie.id}`, description: 'Update all in this movie' },
-    { rel: 'delete', method: 'DELETE', href: `${req.protocol}://${req.get('host')}${req.originalUrl}/${movie.id}` }
+  console.log(req.method)
+  const links = [
+    { rel: 'self', method: 'GET', href: `${req.protocol}://${req.get('host')}${req.originalUrl}` },
+    { rel: 'update', method: 'PATCH', href: `${req.protocol}://${req.get('host')}${req.originalUrl}`, description: 'Partially update this movie' },
+    { rel: 'update', method: 'PUT', href: `${req.protocol}://${req.get('host')}${req.originalUrl}`, description: 'Update all in this movie' },
+    { rel: 'delete', method: 'DELETE', href: `${req.protocol}://${req.get('host')}${req.originalUrl}` }
   ]
+
+  /* links.forEach((link, index) => {
+    console.log(link.method)
+    console.log(req.method)
+    if (link.method === req.method) {
+      links.splice(index, 1)
+    }
+  })
+  links.unshift({ rel: 'self', method: 'GET', href: `${req.protocol}://${req.get('host')}${req.originalUrl}` }) */
+
+  return links
 }
 
 export const baseLinks = (req) => {
   return [
     { rel: 'collection', method: 'GET', href: `${req.protocol}://${req.get('host')}/api/v1/` },
+    { rel: 'create', method: 'POST', href: `${req.protocol}://${req.get('host')}/api/v1/movie` },
     { rel: 'login', method: 'POST', href: `${req.protocol}://${req.get('host')}/api/v1/user/login`, description: 'Login user' },
     { rel: 'register', method: 'POST', href: `${req.protocol}://${req.get('host')}/api/v1/user/register`, description: 'Register user' }
   ]

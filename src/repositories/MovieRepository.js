@@ -28,12 +28,11 @@ export class MovieRepository {
   }
 
   async getAllMovies(req, res, next, movies) {
-    console.log('GET ALL MOVIES')
     const moviestest = Movie.find()
     return moviestest
   }
 
-  async createReview(req, res, next, review) {
+  async createReview(req, res, next, review) { // kolla 400, om det är nån som skickar in fel.
     try {
       console.log('we are inside of create movie in MOVIE repository')
       console.log(req.body)
@@ -51,26 +50,33 @@ export class MovieRepository {
     }
   }
 
-  async updateSomePartInMovie(req, res, next) { // PATCH, UPPDATERA DELAR
-    console.log('we are inside of updatesomepartinmovie')
-    const movie = await Movie.findById(req.params.id) // findById
-    console.log('we are förbi findById')
+  async getSpecificMovie(req) {
+    this.#validateObjectId(req.params.id)
+    const movie = await Movie.findById(req.params.id)
+    if (movie !== null) {
+      return movie
+    } else {
+      throw createError(404)
+    }
+  }
 
-    // findByIdAndUpdate
+  #validateObjectId(id) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw createError(404)
+    }
+  }
 
-    console.log(movie)
+  async updateSomePartInMovie(req, res, next) { // PATCH, UPPDATERA DELAR, // kolla 400, om det är nån som skickar in fel.
+    const movie = await this.getSpecificMovie(req)
 
     if (movie.createdByUserId === req.user.id) {
-      return await Movie.findByIdAndUpdate(req.params.id, req.body)// validator might be added here.
+      await Movie.findByIdAndUpdate(req.params.id, req.body)// validator might be added here.
     } else {
       throw createError(403)
     }
   }
 
-  async updateAllInMovie(req, res, next) { // PUT, UPPDATERA ALLT
-    console.log('inside of update all in movie')
-    console.log('_________________ÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖ')
-    console.log(req.body)
+  async updateAllInMovie(req, res, next) { // check 400, if all is implemented.
     const movie = await Movie.findById(req.params.id)
     console.log(movie)
     const obj = {
@@ -81,17 +87,14 @@ export class MovieRepository {
     }
 
     if (movie.createdByUserId === req.user.id) {
-      // return await Movie.findByIdAndUpdate(req.params.id, req.body)// validator might be added here.
-
       return await Movie.findOneAndReplace({ _id: req.params.id }, obj, { runValidators: true })// validator might be added here.
-      // findOneAndReplace
     } else {
       throw createError(403)
     }
   }
 
   async deleteSpecificMovie(req, res, next) {
-    const movie = await Movie.findById({ id: req.params.id })
+    const movie = await this.getSpecificMovie(req)
 
     if (movie.createdByUserId !== req.user.id) {
       return await Movie.findByIdAndDelete(req.params.id)

@@ -52,6 +52,9 @@ try {
     } else if (err.status === 403) {
       return res
         .sendStatus(403)
+    } else if (err.status === 404) {
+      return res
+        .sendStatus(404)
     } else if (err.status === 409) {
       return res
         .sendStatus(409)

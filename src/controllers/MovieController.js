@@ -1,6 +1,6 @@
 import { MovieService } from '../services/MovieService.js'
 import { Movie } from '../models/movies.js'
-import { createLink, getLinks, baseLinks } from '../util/LinkHandler.js'
+import { createLink, getLinks, baseLinks, loggedInUserGetLinks } from '../util/LinkHandler.js'
 
 export class MovieController {
   #movieService
@@ -14,59 +14,31 @@ export class MovieController {
     this.#movieService.testFunction()
   }
 
-  getSpecificMovie(req, res, next) {
-    console.log('GET SPECIFIC MOVIE')
+  async getSpecificMovie(req, res, next) {
+    try {
+      const response = await this.#movieService.getSpecificMovie(req)
+
+      res
+        .status(200) // check this
+        .json(response)
+    } catch (err) {
+      console.log(err)
+      next(err)
+    }
   }
 
   async createMovie(req, res, next) {
-    console.log('we are inside of create movie')
     try {
-      /* const movie = new Movie({
-        title: req.body.title,
-        category: req.body.category,
-        releaseYear: req.body.releaseYear,
-        createdByUserId: req.user.id
-      }) */
-      const movie = await this.#movieService.createMovie(new Movie({
+      const movieObj = await this.#movieService.createMovie(req, res, next, new Movie({
         title: req.body.title,
         category: req.body.category,
         releaseYear: req.body.releaseYear,
         createdByUserId: req.user.id
       }))
-      /* const movie = await this.#service.createMovie({
-        title: req.body.title,
-        category: req.body.category,
-        releaseYear: req.body.releaseYear,
-        createdByUserId: req.user.id
-      }) */
-
-      console.log('---ÅÅÅÅÅÅÅÅ---')
-      console.log(req.originalUrl)
-      console.log(req.user)
-
-      const movieObj = {
-        title: movie.title,
-        category: movie.category,
-        releaseYear: movie.releaseYear,
-        createdByUserId: movie.createdByUserId,
-        createdAt: movie.createdAt,
-        updatedAt: movie.updatedAt,
-        id: movie.id,
-        links: [{
-          rel: 'self',
-          href: createLink(req, '/movie/create')
-        }, {
-          rel: 'delete',
-          href: createLink(req, `/movie/delete/${movie.id}`)
-        }]
-      }
-
-      console.log('*********')
 
       res
         .status(201)
         .json(movieObj)
-      // this.#service.createMovie(movie)
     } catch (err) {
       console.log(err)
     }
@@ -82,42 +54,15 @@ export class MovieController {
         .status(204)
         .json(deletedMovie)
     } catch (err) {
-      console.log('do we get inside of here? catch delete')
-      res.status(err)
+      console.log('DELETE CATCH ERROR CONTROLLER')
+      console.log(err)
+      next(err)
     }
   }
 
   async getAllMovies(req, res, next) {
-    console.log('get all movies')
-    console.log(req.user)
-    const movies = await this.#movieService.getAllMovies(req, res, next)
-    console.log(movies)
-    console.log(req.user)
-    console.log(':::::::::::::::')
-    console.log(req.originalUrl)
-    const moviesArray = []
+    const response = await this.#movieService.getAllMovies(req, res, next)
 
-    movies.forEach((movie) => {
-      const movieObj = {
-        title: movie.title,
-        category: movie.category,
-        releaseYear: movie.releaseYear,
-        createdByUserId: movie.createdByUserId,
-        createdAt: movie.createdAt,
-        updatedAt: movie.updatedAt,
-        id: movie.id,
-        links: getLinks(req, movie)
-      }
-      moviesArray.push(movieObj)
-    })
-
-    const response = {
-      movies: moviesArray,
-      links: baseLinks(req)
-    }
-
-    console.log('---------')
-    console.log(moviesArray)
     res
       .status(200)
       .json(response)
@@ -126,11 +71,13 @@ export class MovieController {
   async updateSomePartInMovie(req, res, next) {
     try {
       console.log('update some parts in the movie')
-      const movieUpdated = await this.#movieService.updateSomePartInMovie(req, res, next)
-      console.log(movieUpdated)
+      const responseObj = await this.#movieService.updateSomePartInMovie(req, res, next)
+      console.log('TEST')
+      console.log(responseObj)
+
       res
-        .status(204)
-        .json(movieUpdated)
+        .status(200)
+        .json(responseObj)
     } catch (err) {
       console.log('WE ARE INSIDE OF THIS CATCH ERROR')
       console.log(err)
@@ -141,7 +88,11 @@ export class MovieController {
 
   async updateAllInMovie(req, res, next) {
     try {
-      this.#movieService.updateAllInMovie(req, res, next)
+      const responseObj = await this.#movieService.updateAllInMovie(req, res, next)
+
+      res
+        .status(200)
+        .json(responseObj)
     } catch (err) {
       next(err)
     }
