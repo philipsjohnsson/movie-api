@@ -40,22 +40,18 @@ export class MovieController {
         .status(201)
         .json(movieObj)
     } catch (err) {
-      console.log(err)
+      next(err)
     }
   }
 
   async deleteSpecificMovie(req, res, next) {
     try {
       const deletedMovie = await this.#movieService.deleteSpecificMovie(req, res, next)
-      console.log('deletedMovie')
-      console.log(deletedMovie)
 
       res
-        .status(204)
+        .status(200)
         .json(deletedMovie)
     } catch (err) {
-      console.log('DELETE CATCH ERROR CONTROLLER')
-      console.log(err)
       next(err)
     }
   }
@@ -79,9 +75,6 @@ export class MovieController {
         .status(200)
         .json(responseObj)
     } catch (err) {
-      console.log('WE ARE INSIDE OF THIS CATCH ERROR')
-      console.log(err)
-      console.log(err.status)
       next(err)
     }
   }

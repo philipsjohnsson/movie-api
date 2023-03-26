@@ -20,21 +20,12 @@ export const loggedInUserGetLinks = (req, movie) => {
     { rel: 'delete', method: 'DELETE', href: `${req.protocol}://${req.get('host')}${req.originalUrl}` }
   ]
 
-  /* links.forEach((link, index) => {
-    console.log(link.method)
-    console.log(req.method)
-    if (link.method === req.method) {
-      links.splice(index, 1)
-    }
-  })
-  links.unshift({ rel: 'self', method: 'GET', href: `${req.protocol}://${req.get('host')}${req.originalUrl}` }) */
-
   return links
 }
 
 export const baseLinks = (req) => {
   return [
-    { rel: 'collection', method: 'GET', href: `${req.protocol}://${req.get('host')}/api/v1/` },
+    { rel: 'collection', method: 'GET', href: `${req.protocol}://${req.get('host')}/api/v1/movie` },
     { rel: 'create', method: 'POST', href: `${req.protocol}://${req.get('host')}/api/v1/movie` },
     { rel: 'login', method: 'POST', href: `${req.protocol}://${req.get('host')}/api/v1/user/login`, description: 'Login user' },
     { rel: 'register', method: 'POST', href: `${req.protocol}://${req.get('host')}/api/v1/user/register`, description: 'Register user' }

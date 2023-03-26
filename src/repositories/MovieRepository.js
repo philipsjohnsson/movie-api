@@ -96,7 +96,7 @@ export class MovieRepository {
   async deleteSpecificMovie(req, res, next) {
     const movie = await this.getSpecificMovie(req)
 
-    if (movie.createdByUserId !== req.user.id) {
+    if (movie.createdByUserId === req.user.id) {
       return await Movie.findByIdAndDelete(req.params.id)
     } else {
       throw createError(403)
