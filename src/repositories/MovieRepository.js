@@ -18,8 +18,7 @@ export class MovieRepository {
       console.log('CREATE MOVIE')
       console.log(movie)
       return await movie.save()
-      // await movie.save()
-      // return this.#model.save(movie)
+      // await fetch(`${req.protocol}://${req.get('host')}`)
     } catch (err) {
       console.log(err)
       console.log('_________________')

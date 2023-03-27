@@ -2,6 +2,7 @@ import { MovieRepository } from '../repositories/MovieRepository.js'
 import { Movie } from '../models/movies.js'
 import { Review } from '../models/reviews.js'
 import createError from 'http-errors'
+import fetch from 'node-fetch'
 import { createLink, getLinks, baseLinks, loggedInUserGetLinks } from '../util/LinkHandler.js'
 
 export class MovieService {
@@ -68,6 +69,14 @@ export class MovieService {
   async createMovie(req, res, next, movie) {
     if (this.#isClientErrorBadRequestOk(req)) {
       const createdMovie = await this.#service.createMovie(movie)
+
+      await fetch(`${req.protocol}://${req.get('host')}/api/v1/webhook/trigger`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(createdMovie)
+      })
 
       const movieObj = {
         title: createdMovie.title,

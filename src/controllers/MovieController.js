@@ -8,7 +8,7 @@ export class MovieController {
   constructor(service = new MovieService()) {
     this.#movieService = service
   }
-  
+
   testFunction() {
     console.log('TEST we are inside of MovieController')
     this.#movieService.testFunction()
