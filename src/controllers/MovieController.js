@@ -66,10 +66,7 @@ export class MovieController {
 
   async updateSomePartInMovie(req, res, next) {
     try {
-      console.log('update some parts in the movie')
       const responseObj = await this.#movieService.updateSomePartInMovie(req, res, next)
-      console.log('TEST')
-      console.log(responseObj)
 
       res
         .status(200)

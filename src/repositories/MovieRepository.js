@@ -15,47 +15,40 @@ export class MovieRepository {
 
   async createMovie(movie) {
     try {
-      console.log('CREATE MOVIE')
-      console.log(movie)
       return await movie.save()
-      // await fetch(`${req.protocol}://${req.get('host')}`)
     } catch (err) {
-      console.log(err)
-      console.log('_________________')
-      console.log(err.code)
+      throw this.checkStatusError(err)
     }
   }
 
   async getAllMovies(req, res, next, movies) {
-    const moviestest = Movie.find()
-    return moviestest
+    try {
+      const moviestest = Movie.find()
+      return moviestest
+    } catch (err) {
+      throw this.checkStatusError(err)
+    }
   }
 
   async createReview(req, res, next, review) { // kolla 400, om det är nån som skickar in fel.
     try {
-      console.log('we are inside of create movie in MOVIE repository')
-      console.log(req.body)
-      /* const movie = new Movie({
-        title: req.body.title,
-        category: req.body.category,
-        releaseYear: req.body.releaseYear
-      }) */
-      console.log(review)
       await review.save()
     } catch (err) {
-      console.log(err)
-      console.log('_________________')
-      console.log(err.code)
+      throw this.checkStatusError(err)
     }
   }
 
   async getSpecificMovie(req) {
-    this.#validateObjectId(req.params.id)
-    const movie = await Movie.findById(req.params.id)
-    if (movie !== null) {
-      return movie
-    } else {
-      throw createError(404)
+    try {
+      this.#validateObjectId(req.params.id)
+      const movie = await Movie.findById(req.params.id)
+      if (movie !== null) {
+        return movie
+      } else {
+        throw createError(404)
+      }
+    } catch (err) {
+      throw this.checkStatusError(err)
     }
   }
 
@@ -66,39 +59,67 @@ export class MovieRepository {
   }
 
   async updateSomePartInMovie(req, res, next) { // PATCH, UPPDATERA DELAR, // kolla 400, om det är nån som skickar in fel.
-    const movie = await this.getSpecificMovie(req)
+    try {
+      const movie = await this.getSpecificMovie(req)
 
-    if (movie.createdByUserId === req.user.id) {
-      await Movie.findByIdAndUpdate(req.params.id, req.body)// validator might be added here.
-    } else {
-      throw createError(403)
+      if (movie.createdByUserId === req.user.id) {
+        await Movie.findByIdAndUpdate(req.params.id, req.body)// validator might be added here.
+      } else {
+        throw createError(403)
+      }
+    } catch (err) {
+      throw this.checkStatusError(err)
     }
   }
 
   async updateAllInMovie(req, res, next) { // check 400, if all is implemented.
-    const movie = await Movie.findById(req.params.id)
-    console.log(movie)
-    const obj = {
-      title: req.body.title,
-      category: req.body.category,
-      releaseYear: req.body.releaseYear,
-      createdByUserId: movie.createdByUserId
-    }
+    try {
+      const movie = await this.getSpecificMovie(req)
+      console.log(movie)
+      const obj = {
+        title: req.body.title,
+        category: req.body.category,
+        releaseYear: req.body.releaseYear,
+        createdByUserId: movie.createdByUserId
+      }
 
-    if (movie.createdByUserId === req.user.id) {
-      return await Movie.findOneAndReplace({ _id: req.params.id }, obj, { runValidators: true })// validator might be added here.
-    } else {
-      throw createError(403)
+      if (movie.createdByUserId === req.user.id) {
+        return await Movie.findOneAndReplace({ _id: req.params.id }, obj, { runValidators: true })// validator might be added here.
+      } else {
+        throw createError(403)
+      }
+    } catch (err) {
+      throw this.checkStatusError(err)
     }
   }
 
   async deleteSpecificMovie(req, res, next) {
-    const movie = await this.getSpecificMovie(req)
+    try {
+      const movie = await this.getSpecificMovie(req)
 
-    if (movie.createdByUserId === req.user.id) {
-      return await Movie.findByIdAndDelete(req.params.id)
-    } else {
-      throw createError(403)
+      if (movie.createdByUserId === req.user.id) {
+        return await Movie.findByIdAndDelete(req.params.id)
+      } else {
+        throw createError(403)
+      }
+    } catch (err) {
+      throw this.checkStatusError(err)
     }
+  }
+
+  checkStatusError(err) {
+    let error = null
+    if (err.status === 403) {
+      error = createError(403)
+    } else if (err.status === 404) {
+      error = createError(404)
+    } else if (err.status === 401) {
+      error = createError(401)
+    } else if (err.status === 400) {
+      error = createError(400)
+    } else {
+      throw createError(500)
+    }
+    return error
   }
 }

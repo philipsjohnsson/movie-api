@@ -20,6 +20,7 @@ export class WebhookController {
         .status(200)
         .json()
     } catch (err) {
+      console.log(err.status)
       next(err)
     }
   }

@@ -15,15 +15,12 @@ export class AuthRepository {
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
-  async register (req, res, next) {
+  async register(req, res, next) {
     try {
-      console.log('inside of controller and register method')
-      console.log(req.body)
       const user = new User({
         username: req.body.username,
         password: req.body.password
       })
-      console.log(user)
       await user.save()
 
       res
@@ -48,31 +45,41 @@ export class AuthRepository {
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
-  async login (req, res, next) {
+  async login(req, res, next) {
     try {
-      const token = Buffer.from(process.env.ACCESS_TOKEN_SECRET, 'base64') // Gör om det till bytes.
+      console.log('TEST LOGIN')
+      if (req.body.username === undefined || req.body.password === undefined) {
+        throw createError(401)
+      } else {
+        const token = Buffer.from(process.env.ACCESS_TOKEN_SECRET, 'base64') // Gör om det till bytes.
 
-      const user = await User.authenticate(req.body.username, req.body.password)
+        const user = await User.authenticate(req.body.username, req.body.password)
 
-      console.log(user)
-      const payload = {
-        username: user.username,
-        id: user._id
+        console.log(user)
+        const payload = {
+          username: user.username,
+          id: user._id
+        }
+
+        const accessToken = jwt.sign(payload, token, {
+          algorithm: 'RS256',
+          expiresIn: process.env.ACCESS_TOKEN_LIFE
+        })
+
+        res // Make repository responsible for this instead.
+          .status(201)
+          .json({
+            access_token: accessToken
+          })
+      }
+    } catch (err) {
+      let error = err
+      if (err.message === 'Invalid credentials.') {
+        error = createError(401)
+      } else {
+        error = createError(500)
       }
 
-      const accessToken = jwt.sign(payload, token, {
-        algorithm: 'RS256',
-        expiresIn: process.env.ACCESS_TOKEN_LIFE
-      })
-
-      res // Make repository responsible for this instead.
-        .status(201)
-        .json({
-          access_token: accessToken
-        })
-    } catch (err) {
-      const error = createError(401)
-      console.log(err)
       next(error)
     }
   }

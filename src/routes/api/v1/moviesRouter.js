@@ -7,7 +7,6 @@
 
 import express from 'express'
 import { authenticateJWT } from '../../../middlewares/verifyJWT.js'
-// import { AccountController } from '../../../controllers/api/account-controller.js'
 
 export const router = express.Router()
 
@@ -16,14 +15,8 @@ export const router = express.Router()
  */
 const resolveMovieController = (req) => req.app.get('container').resolve('MovieController')
 
-// const controller = new AccountController()
-
-// router.use('/', () => console.log('TEST TEST'))
-
 router.post('/test', (req, res, next) => resolveMovieController(req).testFunction(req, res, next))
 router.post('/', authenticateJWT, (req, res, next) => resolveMovieController(req).createMovie(req, res, next))
-// router.post('/review/create', (req, res, next) => resolveMovieController(req).createReview(req, res, next))
-// router.post('/review/create', (req, res, next) => resolveMovieController(req).createReview(req, res, next))
 router.get('/', (req, res, next) => resolveMovieController(req).getAllMovies(req, res, next))
 router.post('/review/create', authenticateJWT, (req, res, next) => resolveMovieController(req).createReview(req, res, next))
 
