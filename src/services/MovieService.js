@@ -1,16 +1,36 @@
+/**
+ * MovieService.
+ *
+ * @author Philip Jonsson
+ * @version 1.0.0
+ */
+
 import { MovieRepository } from '../repositories/MovieRepository.js'
 import createError from 'http-errors'
 import fetch from 'node-fetch'
 import { getLinks, baseLinks, loggedInUserGetLinks } from '../util/LinkHandler.js'
 
+/**
+ * MovieService.
+ */
 export class MovieService {
   #service
 
-  constructor(service = new MovieRepository()) {
+  /**
+   * Constructor for MovieService.
+   *
+   * @param { object } service - movierepository.
+   */
+  constructor (service = new MovieRepository()) {
     this.#service = service
   }
 
-  async getSpecificMovie(req) {
+  /**
+   * Get a specific movie.
+   *
+   * @param {object} req - Express request object.
+   */
+  async getSpecificMovie (req) {
     const movie = await this.#service.getSpecificMovie(req)
 
     const movieObj = {
@@ -31,7 +51,14 @@ export class MovieService {
     return response
   }
 
-  async getAllMovies(req, res, next) {
+  /**
+   * Get all of the movies in the database.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {string} next - Express next object.
+   */
+  async getAllMovies (req, res, next) {
     const movies = await this.#service.getAllMovies(req, res, next)
     const moviesArray = []
 
@@ -57,7 +84,15 @@ export class MovieService {
     return response
   }
 
-  async createMovie(req, res, next, movie) {
+  /**
+   * Get all of the movies in the database.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {string} next - Express next object.
+   * @param {string} movie - the specific movie.
+   */
+  async createMovie (req, res, next, movie) {
     if (this.#isClientErrorBadRequestOk(req)) {
       const createdMovie = await this.#service.createMovie(movie)
 
@@ -86,7 +121,14 @@ export class MovieService {
     }
   }
 
-  async updateSomePartInMovie(req, res, next) {
+  /**
+   * Update some parts in a specific movie.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {string} next - Express next object.
+   */
+  async updateSomePartInMovie (req, res, next) {
     if (this.#isClientErrorBadRequestOkPatch(req)) {
       await this.#service.updateSomePartInMovie(req, res, next)
 
@@ -101,7 +143,14 @@ export class MovieService {
     }
   }
 
-  async updateAllInMovie(req, res, next) {
+  /**
+   * Update all in a specific movie.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {string} next - Express next object.
+   */
+  async updateAllInMovie (req, res, next) {
     if (this.#isClientErrorBadRequestOk(req)) {
       await this.#service.updateAllInMovie(req, res, next)
 
@@ -115,23 +164,14 @@ export class MovieService {
     }
   }
 
-  #isClientErrorBadRequestOk(req) {
-    if ((req.body.title !== undefined && req.body.category !== undefined) && (req.body.releaseYear !== undefined)) {
-      return true
-    } else {
-      return false
-    }
-  }
-
-  #isClientErrorBadRequestOkPatch(req) {
-    if ((req.body.title !== undefined || req.body.category !== undefined) || (req.body.releaseYear !== undefined)) {
-      return true
-    } else {
-      return false
-    }
-  }
-
-  async deleteSpecificMovie(req, res, next) {
+  /**
+   * Delete a specific movie.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {string} next - Express next object.
+   */
+  async deleteSpecificMovie (req, res, next) {
     await this.#service.deleteSpecificMovie(req, res, next)
     const responseObj = {
       message: 'Deleted correctly',
@@ -139,5 +179,33 @@ export class MovieService {
     }
 
     return responseObj
+  }
+
+  /**
+   * Error check.
+   *
+   * @param {object} req - Express request object.
+   * @returns {boolean} - true/false.
+   */
+  #isClientErrorBadRequestOk (req) {
+    if ((req.body.title !== undefined && req.body.category !== undefined) && (req.body.releaseYear !== undefined)) {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  /**
+   * Error check.
+   *
+   * @param {object} req - Express request object.
+   * @returns {boolean} - true/false.
+   */
+  #isClientErrorBadRequestOkPatch (req) {
+    if ((req.body.title !== undefined || req.body.category !== undefined) || (req.body.releaseYear !== undefined)) {
+      return true
+    } else {
+      return false
+    }
   }
 }

@@ -1,5 +1,5 @@
 /**
- * Account router.
+ * resolveMovieController.
  *
  * @author Philip Jonsson
  * @version 1.0.0
@@ -11,7 +11,10 @@ import { authenticateJWT } from '../../../middlewares/verifyJWT.js'
 export const router = express.Router()
 
 /**
+ * ResolveMovieController.
  *
+ * @param {*} req - Express request object.
+ * @returns {object} - An instance of the resolveMovieController.
  */
 const resolveMovieController = (req) => req.app.get('container').resolve('MovieController')
 

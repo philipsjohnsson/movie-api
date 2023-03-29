@@ -1,11 +1,34 @@
+/**
+ * WebhookRepository.
+ *
+ * @author Philip Jonsson
+ * @version 1.0.0
+ */
+
 import { HookMovie } from '../models/hookmovie.js'
 
+/**
+ * WebhookRepository.
+ */
 export class WebhookRepository {
-  async registerNewMovieHook(req, res, subscriberForHook) {
+  /**
+   * Register new movie hook.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {string} subscriberForHook - subscriber.
+   */
+  async registerNewSubscriberOnMovieHook (req, res, subscriberForHook) {
     await subscriberForHook.save()
   }
 
-  async getAllSubscribersOnMovieHook(req, res) {
+  /**
+   * Get all subscribers.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   */
+  async getAllSubscribersOnMovieHook (req, res) {
     return HookMovie.find()
   }
 }

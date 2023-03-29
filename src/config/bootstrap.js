@@ -7,8 +7,6 @@
 
 import { IoCContainer } from '../util/IoCContainer.js'
 import { AuthService } from '../services/AuthService.js'
-// import { UserService } from '../services/UserService.js'
-// import { HomeController } from '../controllers/HomeController.js'
 import { AuthController } from '../controllers/AuthController.js'
 import { AuthRepository } from '../repositories/AuthRepository.js'
 import { MovieController } from '../controllers/MovieController.js'
@@ -18,7 +16,6 @@ import { MovieRepository } from '../repositories/MovieRepository.js'
 import { Movie } from '../models/movies.js'
 import { WebhookController } from '../controllers/WebhookController.js'
 import { WebhookRepository } from '../repositories/WebhookRepository.js'
-// import { UserController } from '../controllers/UserController.js'
 
 const iocContainer = new IoCContainer()
 
@@ -45,9 +42,6 @@ iocContainer.register('WebhookService', WebhookService, {
 })
 
 iocContainer.register('WebhookController', WebhookController, {
-  /* dependencies: [
-    'WebhookService'
-  ], */
   singleton: true
 })
 
@@ -74,9 +68,5 @@ iocContainer.register('MovieController', MovieController, {
   ],
   singleton: true
 })
-
-/* iocContainer.register('HomeController', HomeController, {
-  singleton: true
-}) */
 
 export const container = Object.freeze(iocContainer)

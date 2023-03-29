@@ -1,6 +1,13 @@
 import jwt from 'jsonwebtoken'
 import createError from 'http-errors'
 
+/**
+ * Check if the JWT is correct.
+ *
+ * @param {object} req - Express request object.
+ * @param {object} res - Express response object.
+ * @param {Function} next - Express next middleware function.
+ */
 export const authenticateJWT = (req, res, next) => {
   try {
     const publicKey = Buffer.from(process.env.ACCESS_TOKEN_PUBLIC, 'base64')

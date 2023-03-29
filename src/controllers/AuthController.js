@@ -1,7 +1,14 @@
+/**
+ * AuthController.
+ *
+ * @author Philip Jonsson
+ * @version 1.0.0
+ */
+
 import { AuthService } from '../services/AuthService.js'
 
 /**
- *
+ * AuthController class for the API.
  */
 export class AuthController {
   #authService
@@ -15,15 +22,25 @@ export class AuthController {
     this.#authService = service
   }
 
-  testFunction(req, res, next) {
-    this.#authService.testFunction(req, res, next)
-  }
-
-  login(req, res, next) {
+  /**
+   * Login a user.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   */
+  login (req, res, next) {
     this.#authService.login(req, res, next)
   }
 
-  register(req, res, next) {
+  /**
+   * Register a user.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   */
+  register (req, res, next) {
     this.#authService.register(req, res, next)
   }
 }

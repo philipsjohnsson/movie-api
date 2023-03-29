@@ -1,9 +1,18 @@
+/**
+ * AuthRepository.
+ *
+ * @author Philip Jonsson
+ * @version 1.0.0
+ */
+
 import createError from 'http-errors'
 import { User } from '../models/user.js'
 import jwt from 'jsonwebtoken'
 
+/**
+ * AuthRepository for the API.
+ */
 export class AuthRepository {
-
   /**
    * Register a new user.
    *
@@ -11,7 +20,7 @@ export class AuthRepository {
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
-  async register(req, res, next) {
+  async register (req, res, next) {
     try {
       const user = new User({
         username: req.body.username,
@@ -40,7 +49,7 @@ export class AuthRepository {
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
-  async login(req, res, next) {
+  async login (req, res, next) {
     try {
       if (req.body.username === undefined || req.body.password === undefined) {
         throw createError(401)

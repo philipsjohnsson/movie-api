@@ -1,16 +1,24 @@
-export const createLink = (req, path) => {
-  return `${req.protocol}://${req.get('host')}/api/v1${path}`
-}
 
+/**
+ * Creates a link for self only.
+ *
+ * @param {object} req - Express request object.
+ * @param {object} movie - the specific movie.
+ * @returns {string} - returns a link.
+ */
 export const getLinks = (req, movie) => {
-  // if (req.user.id === createdByUserId) {
   return [
-    // { rel: 'self', method: req.method, href: `${req.protocol}://${req.get('host')}${req.originalUrl}` },
     { rel: 'self', method: 'GET', href: `${req.protocol}://${req.get('host')}${req.originalUrl}/${movie.id}` }
   ]
-  // }
 }
 
+/**
+ * Creates links for logged in user get links.
+ *
+ * @param {object} req - Express request object.
+ * @param {object} movie - the specific movie.
+ * @returns {string} - returns a link.
+ */
 export const loggedInUserGetLinks = (req, movie) => {
   const links = [
     { rel: 'self', method: 'GET', href: `${req.protocol}://${req.get('host')}${req.originalUrl}` },
@@ -22,6 +30,12 @@ export const loggedInUserGetLinks = (req, movie) => {
   return links
 }
 
+/**
+ * Creates baselinks.
+ *
+ * @param {object} req - Express request object.
+ * @returns {string} - returns a link.
+ */
 export const baseLinks = (req) => {
   return [
     { rel: 'collection', method: 'GET', href: `${req.protocol}://${req.get('host')}/api/v1/movie` },

@@ -1,35 +1,53 @@
+/**
+ * MovieRepository.
+ *
+ * @author Philip Jonsson
+ * @version 1.0.0
+ */
+
 import { Movie } from '../models/movies.js'
 import createError from 'http-errors'
 import mongoose from 'mongoose'
 
+/**
+ * MovieRepository.
+ */
 export class MovieRepository {
-
-  async createMovie(movie) {
+  /**
+   * Register a new user.
+   *
+   * @param {object} movie - the movie that should be created.
+   */
+  async createMovie (movie) {
     try {
       return await movie.save()
     } catch (err) {
-      throw this.checkStatusError(err)
+      throw this.#checkStatusError(err)
     }
   }
 
-  async getAllMovies(req, res, next, movies) {
+  /**
+   * Get all movies.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   */
+  async getAllMovies (req, res, next) {
     try {
       const moviestest = Movie.find()
       return moviestest
     } catch (err) {
-      throw this.checkStatusError(err)
+      throw this.#checkStatusError(err)
     }
   }
 
-  async createReview(req, res, next, review) { // kolla 400, om det är nån som skickar in fel.
-    try {
-      await review.save()
-    } catch (err) {
-      throw this.checkStatusError(err)
-    }
-  }
-
-  async getSpecificMovie(req) {
+  /**
+   * Get a specific movie.
+   *
+   * @param {object} req - Express request object.
+   */
+  async getSpecificMovie (req) {
     try {
       this.#validateObjectId(req.params.id)
       const movie = await Movie.findById(req.params.id)
@@ -39,31 +57,39 @@ export class MovieRepository {
         throw createError(404)
       }
     } catch (err) {
-      throw this.checkStatusError(err)
+      throw this.#checkStatusError(err)
     }
   }
 
-  #validateObjectId(id) {
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      throw createError(404)
-    }
-  }
-
-  async updateSomePartInMovie(req, res, next) { // PATCH, UPPDATERA DELAR, // kolla 400, om det är nån som skickar in fel.
+  /**
+   * Update some part in a specific movie.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   */
+  async updateSomePartInMovie (req, res, next) {
     try {
       const movie = await this.getSpecificMovie(req)
 
       if (movie.createdByUserId === req.user.id) {
-        await Movie.findByIdAndUpdate(req.params.id, req.body)// validator might be added here.
+        await Movie.findByIdAndUpdate(req.params.id, req.body)
       } else {
         throw createError(403)
       }
     } catch (err) {
-      throw this.checkStatusError(err)
+      throw this.#checkStatusError(err)
     }
   }
 
-  async updateAllInMovie(req, res, next) { // check 400, if all is implemented.
+  /**
+   * Update all in a specific movie.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   */
+  async updateAllInMovie (req, res, next) { // check 400, if all is implemented.
     try {
       const movie = await this.getSpecificMovie(req)
       const obj = {
@@ -79,11 +105,18 @@ export class MovieRepository {
         throw createError(403)
       }
     } catch (err) {
-      throw this.checkStatusError(err)
+      throw this.#checkStatusError(err)
     }
   }
 
-  async deleteSpecificMovie(req, res, next) {
+  /**
+   * Delete a specific movie.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   */
+  async deleteSpecificMovie (req, res, next) {
     try {
       const movie = await this.getSpecificMovie(req)
 
@@ -93,11 +126,28 @@ export class MovieRepository {
         throw createError(403)
       }
     } catch (err) {
-      throw this.checkStatusError(err)
+      throw this.#checkStatusError(err)
     }
   }
 
-  checkStatusError(err) {
+  /**
+   * Validate if the id is a objectId that .
+   *
+   * @param {object} id - the id to check.
+   */
+  #validateObjectId (id) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw createError(404)
+    }
+  }
+
+  /**
+   * Check what error it is.
+   *
+   * @param { Error } err - the error to check.
+   * @returns { Error } - returns an error.
+   */
+  #checkStatusError (err) {
     let error = null
     if (err.status === 403) {
       error = createError(403)
