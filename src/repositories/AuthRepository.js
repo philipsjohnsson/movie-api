@@ -4,10 +4,6 @@ import jwt from 'jsonwebtoken'
 
 export class AuthRepository {
 
-  testFunction(req, res, next) {
-    console.log('TEST FUNCTION INSIDE OF AUTH REPOSITORY')
-  }
-
   /**
    * Register a new user.
    *
@@ -27,7 +23,6 @@ export class AuthRepository {
         .status(201)
         .json({ id: user.id, login: 'localhost:8080/api/v1/user/login' })
     } catch (err) {
-      console.log(err)
       let error = err
       if (err.code === 11000) {
         error = createError(409)
@@ -47,7 +42,6 @@ export class AuthRepository {
    */
   async login(req, res, next) {
     try {
-      console.log('TEST LOGIN')
       if (req.body.username === undefined || req.body.password === undefined) {
         throw createError(401)
       } else {
@@ -55,7 +49,6 @@ export class AuthRepository {
 
         const user = await User.authenticate(req.body.username, req.body.password)
 
-        console.log(user)
         const payload = {
           username: user.username,
           id: user._id
@@ -74,7 +67,7 @@ export class AuthRepository {
       }
     } catch (err) {
       let error = err
-      if (err.message === 'Invalid credentials.') {
+      if (err.message === 'Unauthorized') {
         error = createError(401)
       } else {
         error = createError(500)

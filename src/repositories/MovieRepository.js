@@ -3,15 +3,6 @@ import createError from 'http-errors'
 import mongoose from 'mongoose'
 
 export class MovieRepository {
-  #model
-
-  constructor(model) {
-    this.#model = model
-  }
-
-  testFunction() {
-    console.log('TEST inside of MovieRepository')
-  }
 
   async createMovie(movie) {
     try {
@@ -75,7 +66,6 @@ export class MovieRepository {
   async updateAllInMovie(req, res, next) { // check 400, if all is implemented.
     try {
       const movie = await this.getSpecificMovie(req)
-      console.log(movie)
       const obj = {
         title: req.body.title,
         category: req.body.category,

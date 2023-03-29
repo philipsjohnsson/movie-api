@@ -12,7 +12,6 @@ export const getLinks = (req, movie) => {
 }
 
 export const loggedInUserGetLinks = (req, movie) => {
-  console.log(req.method)
   const links = [
     { rel: 'self', method: 'GET', href: `${req.protocol}://${req.get('host')}${req.originalUrl}` },
     { rel: 'update', method: 'PATCH', href: `${req.protocol}://${req.get('host')}${req.originalUrl}`, description: 'Partially update this movie' },

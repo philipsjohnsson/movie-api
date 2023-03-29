@@ -17,7 +17,6 @@ export const router = express.Router()
  * @returns 
  */
 const resolveAuthController = (req) => req.app.get('container').resolve('AuthController')
-console.log('TEST')
 
 router.get('/', (req, res, next) => resolveAuthController(req).testFunction(req, res, next))
 

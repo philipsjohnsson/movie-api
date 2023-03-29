@@ -22,10 +22,6 @@ import { WebhookRepository } from '../repositories/WebhookRepository.js'
 
 const iocContainer = new IoCContainer()
 
-/* iocContainer.register('UserService', UserService, {
-  singleton: true
-}) */
-
 iocContainer.register('AuthService', AuthService, {
   dependencies: [
     'AuthRepository'
@@ -37,12 +33,6 @@ iocContainer.register('AuthRepository', AuthRepository, {
   singleton: true
 })
 
-/* iocContainer.register('UserController', UserController, {
-  dependencies: [
-    'UserService'
-  ],
-  singleton: true
-}) */
 iocContainer.register('WebhookRepository', WebhookRepository, {
   singelton: true
 })
@@ -64,9 +54,6 @@ iocContainer.register('WebhookController', WebhookController, {
 iocContainer.register('Movie', Movie, { type: true })
 
 iocContainer.register('MovieRepository', MovieRepository, {
-  dependencies: [
-    'Movie'
-  ],
   singleton: true
 })
 

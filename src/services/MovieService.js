@@ -1,20 +1,13 @@
 import { MovieRepository } from '../repositories/MovieRepository.js'
-import { Movie } from '../models/movies.js'
-import { Review } from '../models/reviews.js'
 import createError from 'http-errors'
 import fetch from 'node-fetch'
-import { createLink, getLinks, baseLinks, loggedInUserGetLinks } from '../util/LinkHandler.js'
+import { getLinks, baseLinks, loggedInUserGetLinks } from '../util/LinkHandler.js'
 
 export class MovieService {
   #service
 
   constructor(service = new MovieRepository()) {
     this.#service = service
-  }
-
-  testFunction() {
-    console.log('WE ARE INSIDE OF MOVIE SERVICE')
-    this.#service.testFunction()
   }
 
   async getSpecificMovie(req) {
@@ -39,12 +32,10 @@ export class MovieService {
   }
 
   async getAllMovies(req, res, next) {
-    console.log(':::::::::::::::')
-    console.log(req.originalUrl)
     const movies = await this.#service.getAllMovies(req, res, next)
     const moviesArray = []
 
-    movies.forEach((movie) => { // Lägga detta i service.
+    movies.forEach((movie) => {
       const movieObj = {
         title: movie.title,
         category: movie.category,
@@ -95,27 +86,15 @@ export class MovieService {
     }
   }
 
-  createReview(req, res, next) {
-    console.log(req.body)
-    const review = new Review({
-      grade: req.body.grade,
-      movieId: req.body.movieId,
-      description: req.body.description,
-      createdById: req.body.createdById
-    })
-    console.log(review)
-    this.#service.createReview(req, res, next, review)
-  }
-
   async updateSomePartInMovie(req, res, next) {
     if (this.#isClientErrorBadRequestOkPatch(req)) {
-      const movie = await this.#service.updateSomePartInMovie(req, res, next)
-      console.log('------------------')
-      console.log(movie)
+      await this.#service.updateSomePartInMovie(req, res, next)
+
       const responseObj = {
         message: 'Updated correctly',
         links: baseLinks(req)
       }
+
       return responseObj
     } else {
       throw createError(400)
@@ -124,9 +103,8 @@ export class MovieService {
 
   async updateAllInMovie(req, res, next) {
     if (this.#isClientErrorBadRequestOk(req)) {
-      const movie = await this.#service.updateAllInMovie(req, res, next)
-      console.log('------------')
-      console.log(movie)
+      await this.#service.updateAllInMovie(req, res, next)
+
       const responseObj = {
         message: 'Updated correctly',
         links: baseLinks(req)

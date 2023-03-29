@@ -1,17 +1,11 @@
 import { MovieService } from '../services/MovieService.js'
 import { Movie } from '../models/movies.js'
-import { createLink, getLinks, baseLinks, loggedInUserGetLinks } from '../util/LinkHandler.js'
 
 export class MovieController {
   #movieService
 
   constructor(service = new MovieService()) {
     this.#movieService = service
-  }
-
-  testFunction() {
-    console.log('TEST we are inside of MovieController')
-    this.#movieService.testFunction()
   }
 
   async getSpecificMovie(req, res, next) {
@@ -22,7 +16,6 @@ export class MovieController {
         .status(200) // check this
         .json(response)
     } catch (err) {
-      console.log(err)
       next(err)
     }
   }
@@ -86,9 +79,5 @@ export class MovieController {
     } catch (err) {
       next(err)
     }
-  }
-
-  createReview(req, res, next) {
-    this.#movieService.createReview(req, res, next)
   }
 }

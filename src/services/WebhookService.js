@@ -10,9 +10,6 @@ export class WebhookService {
   }
 
   registerNewMovieHook(req, res, subscriberForHook) {
-    console.log('*****************')
-    console.log(subscriberForHook)
-    console.log('*****************')
     if (this.#isValidURL(subscriberForHook.url)) {
       this.#serviceRepository.registerNewMovieHook(req, res, subscriberForHook)
     } else {

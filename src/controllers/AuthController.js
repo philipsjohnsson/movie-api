@@ -16,12 +16,10 @@ export class AuthController {
   }
 
   testFunction(req, res, next) {
-    console.log('test function inside of auth controller')
     this.#authService.testFunction(req, res, next)
   }
 
   login(req, res, next) {
-    console.log('we are inside of login in authcontroller')
     this.#authService.login(req, res, next)
   }
 

@@ -9,7 +9,6 @@ export class WebhookController {
   }
 
   testFunction(req, res, next) {
-    console.log('WEBHOOK CONTROLLER')
     try {
       this.#webhookService.registerNewMovieHook(req, res, new HookMovie({
         url: req.body.url,
@@ -20,7 +19,6 @@ export class WebhookController {
         .status(200)
         .json()
     } catch (err) {
-      console.log(err.status)
       next(err)
     }
   }
@@ -29,10 +27,5 @@ export class WebhookController {
     this.#webhookService.testFunctionTrigger(req, res, next)
 
     next()
-  }
-
-  testWebhook(req, res, next) {
-    console.log('..WEBHOOK TEST..')
-    console.log(req.body)
   }
 }
