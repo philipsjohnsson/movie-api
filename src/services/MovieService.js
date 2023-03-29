@@ -78,7 +78,7 @@ export class MovieService {
 
     const response = {
       movies: moviesArray,
-      links: baseLinks(req)
+      baselinks: baseLinks(req)
     }
 
     return response
@@ -104,6 +104,8 @@ export class MovieService {
         body: JSON.stringify(createdMovie)
       })
 
+      const movieArray = []
+
       const movieObj = {
         title: createdMovie.title,
         category: createdMovie.category,
@@ -115,7 +117,14 @@ export class MovieService {
         links: loggedInUserGetLinks(req, createdMovie)
       }
 
-      return movieObj
+      movieArray.push(movieObj)
+
+      const movieObjWithBaseLinks = {
+        movie: movieArray,
+        baselinks: baseLinks(req)
+      }
+
+      return movieObjWithBaseLinks
     } else {
       throw createError(400)
     }
@@ -134,7 +143,7 @@ export class MovieService {
 
       const responseObj = {
         message: 'Updated correctly',
-        links: baseLinks(req)
+        baselinks: baseLinks(req)
       }
 
       return responseObj
@@ -156,7 +165,7 @@ export class MovieService {
 
       const responseObj = {
         message: 'Updated correctly',
-        links: baseLinks(req)
+        baselinks: baseLinks(req)
       }
       return responseObj
     } else {
@@ -175,7 +184,7 @@ export class MovieService {
     await this.#service.deleteSpecificMovie(req, res, next)
     const responseObj = {
       message: 'Deleted correctly',
-      links: baseLinks(req)
+      baselinks: baseLinks(req)
     }
 
     return responseObj

@@ -51,6 +51,7 @@ export class MovieRepository {
     try {
       this.#validateObjectId(req.params.id)
       const movie = await Movie.findById(req.params.id)
+      console.log(movie)
       if (movie !== null) {
         return movie
       } else {

@@ -20,4 +20,3 @@ const resolveWebhookController = (req) => req.app.get('container').resolve('Webh
 
 router.post('/register', authenticateJWT, (req, res, next) => resolveWebhookController(req).subscribeOnCreateMovie(req, res, next))
 router.post('/trigger', (req, res, next) => resolveWebhookController(req).triggerMovieHook(req, res, next))
-router.post('/test', (req, res, next) => resolveWebhookController(req).testWebhook(req, res, next))
