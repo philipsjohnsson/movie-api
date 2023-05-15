@@ -47,7 +47,10 @@ export class WebhookService {
    * @param {Function} next - Express next middleware function.
    */
   async triggerMovieHook (req, res, next) {
+    console.log('ÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅ')
+    console.log('*************')
     const subscribers = await this.#serviceRepository.getAllSubscribersOnMovieHook(req, res)
+    console.log(subscribers)
 
     subscribers.forEach(async (subscriber) => {
       if (this.#isValidURL(subscriber.url)) {
@@ -57,6 +60,24 @@ export class WebhookService {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify(req.body)
+        }
+        )
+      }
+    })
+  }
+
+  async triggerMovieHookTest (movie) {
+    const subscribers = await this.#serviceRepository.getAllSubscribersOnMovieHook()
+    console.log(subscribers)
+
+    subscribers.forEach(async (subscriber) => {
+      if (this.#isValidURL(subscriber.url)) {
+        await fetch(subscriber.url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(movie)
         }
         )
       }
