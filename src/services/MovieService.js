@@ -7,7 +7,6 @@
 
 import { MovieRepository } from '../repositories/MovieRepository.js'
 import createError from 'http-errors'
-import fetch from 'node-fetch'
 import { getLinks, baseLinks, loggedInUserGetLinks } from '../util/LinkHandler.js'
 import { WebhookService } from './WebhookService.js'
 
@@ -101,14 +100,6 @@ export class MovieService {
       console.log(createdMovie)
 
       this.#webhookService.triggerMovieHookTest(createdMovie)
-
-      /* await fetch('http://localhost:8080/api/v1/webhook/trigger', { // http://localhost:8080/api/v1/webhook/trigger // https://movie-api-production-ad52.up.railway.app/api/v1/webhook/trigger
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(createdMovie)
-      }) */
 
       const movieArray = []
 

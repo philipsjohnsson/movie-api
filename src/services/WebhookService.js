@@ -47,10 +47,7 @@ export class WebhookService {
    * @param {Function} next - Express next middleware function.
    */
   async triggerMovieHook (req, res, next) {
-    console.log('ÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅ')
-    console.log('*************')
     const subscribers = await this.#serviceRepository.getAllSubscribersOnMovieHook(req, res)
-    console.log(subscribers)
 
     subscribers.forEach(async (subscriber) => {
       if (this.#isValidURL(subscriber.url)) {
