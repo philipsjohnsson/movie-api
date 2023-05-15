@@ -19,4 +19,3 @@ export const router = express.Router()
 const resolveWebhookController = (req) => req.app.get('container').resolve('WebhookController')
 
 router.post('/register', authenticateJWT, (req, res, next) => resolveWebhookController(req).subscribeOnCreateMovie(req, res, next))
-router.post('/trigger', (req, res, next) => resolveWebhookController(req).triggerMovieHook(req, res, next))

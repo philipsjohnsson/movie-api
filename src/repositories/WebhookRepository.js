@@ -25,8 +25,6 @@ export class WebhookRepository {
   /**
    * Get all subscribers.
    *
-   * @param {object} req - Express request object.
-   * @param {object} res - Express response object.
    */
   async getAllSubscribersOnMovieHook () {
     return HookMovie.find()

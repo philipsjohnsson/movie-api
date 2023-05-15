@@ -21,6 +21,7 @@ export class MovieService {
    * Constructor for MovieService.
    *
    * @param { object } service - movierepository.
+   * @param { object } webhookService - webhookservice.
    */
   constructor (service = new MovieRepository(), webhookService = new WebhookService()) {
     this.#service = service

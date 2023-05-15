@@ -44,17 +44,4 @@ export class WebhookController {
       next(err)
     }
   }
-
-  /**
-   * Triggers when a movie is created.
-   *
-   * @param {object} req - Express request object.
-   * @param {object} res - Express response object.
-   * @param {Function} next - Express next middleware function.
-   */
-  triggerMovieHook (req, res, next) {
-    this.#webhookService.triggerMovieHook(req, res, next)
-
-    next()
-  }
 }
