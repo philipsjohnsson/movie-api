@@ -104,7 +104,7 @@ export class MovieService {
 
       console.log('TEST')
 
-      // this.#webhookService.triggerMovieHookTest(createdMovie)
+      this.#webhookService.triggerMovieHookTest(createdMovie)
 
       const movieArray = []
 

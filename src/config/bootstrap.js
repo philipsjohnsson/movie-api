@@ -37,8 +37,7 @@ iocContainer.register('WebhookRepository', WebhookRepository, {
 iocContainer.register('WebhookService', WebhookService, {
   dependencies: [
     'WebhookRepository'
-  ],
-  singelton: true
+  ]
 })
 
 iocContainer.register('WebhookController', WebhookController, {
