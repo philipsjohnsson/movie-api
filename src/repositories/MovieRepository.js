@@ -20,6 +20,7 @@ export class MovieRepository {
    */
   async createMovie (movie) {
     try {
+      console.log('create movie')
       return await movie.save()
     } catch (err) {
       throw this.#checkStatusError(err)

@@ -96,11 +96,15 @@ export class MovieService {
    * @param {string} movie - the specific movie.
    */
   async createMovie (req, res, next, movie) {
+    console.log('TEST')
     if (this.#isClientErrorBadRequestOk(req)) {
+      console.log('we are inside of this')
       const createdMovie = await this.#service.createMovie(movie)
       console.log(createdMovie)
 
-      this.#webhookService.triggerMovieHookTest(createdMovie)
+      console.log('TEST')
+
+      // this.#webhookService.triggerMovieHookTest(createdMovie)
 
       const movieArray = []
 
@@ -121,6 +125,8 @@ export class MovieService {
         movie: movieArray,
         baselinks: baseLinks(req)
       }
+
+      console.log('TEST')
 
       return movieObjWithBaseLinks
     } else {

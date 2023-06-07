@@ -51,6 +51,7 @@ export class MovieController {
    */
   async createMovie (req, res, next) {
     try {
+      console.log('TEST WE CREATE A MOVIE HERE')
       const movieObj = await this.#movieService.createMovie(req, res, next, new Movie({
         title: req.body.title,
         category: req.body.category,

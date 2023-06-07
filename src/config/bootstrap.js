@@ -53,6 +53,7 @@ iocContainer.register('MovieRepository', MovieRepository, {
 
 iocContainer.register('MovieService', MovieService, {
   dependencies: [
+    'MovieRepository',
     'WebhookService'
   ],
   singleton: true

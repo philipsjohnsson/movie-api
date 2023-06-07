@@ -1285,7 +1285,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"url\": \"https://webhook.site/000e355e-c12d-4928-8531-dab938013a67\"\r\n}",
+							"raw": "{\r\n    \"url\": \"https://webhook.site/012eac37-05ab-4574-88e1-fe2177d1b7aa\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1334,7 +1334,7 @@
 		},
 		{
 			"key": "api_url",
-			"value": "https://movie-api-production-ad52.up.railway.app/api/v1/",
+			"value": "",
 			"type": "string"
 		}
 	]
