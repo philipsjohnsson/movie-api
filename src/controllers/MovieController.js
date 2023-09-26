@@ -94,11 +94,15 @@ export class MovieController {
    * @param {Function} next - Express next middleware function.
    */
   async getAllMovies (req, res, next) {
-    const response = await this.#movieService.getAllMovies(req, res, next)
+    try {
+      const response = await this.#movieService.getAllMovies(req, res, next)
 
-    res
-      .status(200)
-      .json(response)
+      res
+        .status(200)
+        .json(response)
+    } catch (error) {
+      next(error)
+    }
   }
 
   /**
